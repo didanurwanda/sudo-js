@@ -1,0 +1,49 @@
+{
+  "name": "sudo-js",
+  "version": "1.0.0",
+  "description": "Using sudo with password.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://didanurwanda@github.com/didanurwanda/sudo-js.git"
+  },
+  "author": "Dida Nurwanda",
+  "dependencies": {
+    "inpath": "^1.0.2"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "sudo",
+    "nodejs",
+    "nwjs",
+    "node-webkit",
+    "electron",
+    "exec",
+    "exec-sudo",
+    "exec sudo",
+    "sudo-exec",
+    "sudo exec",
+    "sudo-js",
+    "sudo js",
+    "js sudo",
+    "js-sudo",
+    "sudo-nwjs",
+    "sudo nwjs",
+    "nwjs-sudo",
+    "nwjs sudo",
+    "sudo-node-webkit",
+    "sudo node webkit",
+    "node-webkit-sudo",
+    "node webkit sudo",
+    "sudo-electron",
+    "sudo electron",
+    "electron-sudo",
+    "electron sudo",
+    "sudo-password",
+    "sudo password"
+  ]
+}
