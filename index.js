@@ -5,8 +5,8 @@ var pidof = require('./libs/pidof');
 var sudo = inpath('sudo');
 var isWin = (process.platform == 'win32');
 var messages = [
-    'PID is NULL',
-    'password is INVALID'
+    'PID is null',
+    'Password is invalid'
 ];
 
 function sudoCommand(command, password, withResult, callback) {
