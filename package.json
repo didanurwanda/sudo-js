@@ -11,9 +11,12 @@
     "type": "git",
     "url": "https://didanurwanda@github.com/didanurwanda/sudo-js.git"
   },
-  "author": "Dida Nurwanda",
+  "author": {
+    "name": "Dida Nurwanda"
+  },
   "dependencies": {
-    "inpath": "^1.0.2"
+    "inpath": "^1.0.2",
+    "pidof": "^1.0.2"
   },
   "devDependencies": {},
   "keywords": [
@@ -45,5 +48,15 @@
     "electron sudo",
     "sudo-password",
     "sudo password"
-  ]
+  ],
+  "readme": "# sudo-js\n\nUsing sudo with password for node-js.\n\nsudo-js by default has support for windows, linux and osx. But the root access (UAC) in Windows is not running. This feature will be added later.\n\nInstall `npm install sudo-js --save`\n\n\n### Running\n\nbasic\n\n```javascript\nvar sudo = require('sudo-js');\nsudo.setPassword('your-password');\n\nvar command = ['chmod', '0777', '/Users/didanurwanda/Downloads'];\nsudo.exec(command, function(err, pid, result) {\n\tconsole.log(result);\n});\n\n```\n\nperformance optimizer\n\n```javascript\nvar sudo = require('sudo-js');\nsudo.setPassword('your-password');\n\nvar options = {check: false, withResult: false};\nvar command = ['chmod', '0777', '/Users/didanurwanda/Downloads'];\nsudo.exec(command, options, function(err, pid, result) {\n\tconsole.log(result); // output '';\n});\n```\n\ncheck password\n\n```javascript\nvar sudo = require('sudo-js');\nsudo.setPassword('your-password');\n\nsudo.check(function(valid) {\n\tconsole.log('password valid : ', valid);\n});\n```\n\n### API\n\n- password\n- setPassword (string)\n- check (function)\n- exec (array, object|function, function)\n- killByPid (int, function)\n- killByName (string, function)\n\n### Options\n\n- `check` check password before execute\n- `withResult` sending result in callback\n\n### Contributor\n\nDida Nurwanda\n\n* [http://www.didanurwanda.com](http://www.didanurwanda.com)\n* [Blog](http://blog.didanurwanda.com)\n* [Github Repository](https://github.com/didanurwanda?tab=repositories)\n* [NPM](https://www.npmjs.com/~didanurwanda)\n* [Twitter](https://www.twitter.com/didanurwanda)",
+  "readmeFilename": "readme.md",
+  "gitHead": "e8300f1dd50ce4bb8624bda411ed65f7113ddf86",
+  "bugs": {
+    "url": "https://github.com/didanurwanda/sudo-js/issues"
+  },
+  "homepage": "https://github.com/didanurwanda/sudo-js",
+  "_id": "sudo-js@1.0.0",
+  "_shasum": "322791d2f9f6464364f4a1ef16dfe15aea191e54",
+  "_from": "sudo-js@*"
 }

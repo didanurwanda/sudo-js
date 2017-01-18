@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var inpath = require('inpath').sync;
-var pidof = require('./libs/pidof');
+var pidof = require('pidof');
 var sudo = inpath('sudo');
 var isWin = (process.platform == 'win32');
 var messages = [
@@ -17,7 +17,7 @@ function sudoCommand(command, password, withResult, callback) {
     };
 
     var error = null;
-    var pids = {};
+    var pid = '';
     var result = '';
     var prompt = '#sudo-js-passwd#';
     var prompts = 0;
@@ -33,27 +33,27 @@ function sudoCommand(command, password, withResult, callback) {
         result += "\n"+ data.toString();
     });
 
-    function waitForStartup(err, pid) {
+    if (withResult) {
+        spawnProcess.on('close', function(code) {
+            callback(error, pid, result);
+        });
+    }
+
+    function waitForStartup(err, _pid) {
         if (err) {
             throw new Error('Couldn\'t start '+ bin);
         }
 
-        if (pid.length || spawnProcess.exitCode !== null) {
+        if (_pid || spawnProcess.exitCode !== null) {
             error = null;
-            pids = {pid: pid};
+            pid = _pid;
             if (!withResult) {
-                callback(error, pids, result);
+                callback(error, pid, result);
             }
         } else {
             setTimeout(function() {
                 pidof(bin, waitForStartup);
             }, 100);
-        }
-
-        if (withResult) {
-            spawnProcess.on('close', function(code) {
-                callback(error, pids, result);
-            });
         }
     }
     pidof(bin, waitForStartup);
@@ -144,11 +144,9 @@ module.exports = {
     },
     killByName: function(name, callback) {
         var self = this;
-        pidof(name, function(err, pids) {
-            if (pids && pids.length) {
-                pids.forEach(function(pid) {
-                    self.killByPid(pid, callback);
-                });
+        pidof(name, function(err, pid) {
+            if (pid) {
+                self.killByPid(pid, callback);
             } else {
                 callback(true, {code: 0, msg: messages[0]}, '');
             }
