@@ -72,18 +72,48 @@ function sudoCommand(command, password, withResult, callback) {
     });
 }
 
+function sudoCommandForWindows(command, withResult, callback) {
+    var bin = command[0];
+    command.splice(0, 1);
+    var result = '';
+    var task = spawn(bin, command, {
+        shell: true
+    });
+
+    task.stderr.on('data', function(data) {
+        data = data.toString();
+        if (data.trim() != '' && withResult) {
+            result += "\n"+ data;
+        }
+    });
+
+    task.stdout.on('data', function(data) {
+        data = data.toString();
+        if (data.trim() != '' && withResult) {
+            result += "\n"+ data;
+        }
+    });
+
+    task.on('close', function(code) {
+        callback(null, null, result);
+    });
+
+    task.on('error', function(code) {
+        callback(true, null, result);
+    });
+}
+
 module.exports = {
     password: '',
     setPassword: function(password) {
         this.password = password;
     },
     check: function(callback) {
-        var command = [isWin ? 'dir' : 'ls'];
         if (isWin) {
             // next update
             callback(true);
         } else {
-            sudoCommand(command, this.password, false, (function(i) {
+            sudoCommand(['ls'], this.password, false, (function(i) {
               return function (err) {
                 if (!i++) {
                   callback(!err)
@@ -114,9 +144,11 @@ module.exports = {
         }
 
         if (isWin) {
-            exec(command.join(' '), function(err, stdout, stderr) {
-                callback(err, {}, stdout.toString());
-            });
+            // exec(command.join(' '), function(err, stdout, stderr) {
+            //     callback(err, {}, stdout.toString());
+            // });
+            // change method to spawn
+            sudoCommandForWindows(command, options.withResult, callback);
         } else {
             if (options.check === true || options.check === undefined) {
                 this.check(function(valid) {
