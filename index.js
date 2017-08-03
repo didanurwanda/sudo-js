@@ -12,9 +12,14 @@ var messages = [
 function sudoCommand(command, password, withResult, callback) {
     password = password || '';
     withResult = withResult === undefined ? true : withResult;
-    callback = callback || function() {
+    // callback = callback || function() {
 
-    };
+    // };
+
+    if (typeof callback != 'function') {
+        callback = function() {
+        }
+    }
 
     var error = null;
     var pid = '';
@@ -48,7 +53,11 @@ function sudoCommand(command, password, withResult, callback) {
             error = null;
             pid = _pid;
             if (!withResult) {
-                callback(error, pid, result);
+                try {
+                    callback(error, pid, result);
+                } catch (e) {
+                    
+                }
             }
         } else {
             setTimeout(function() {
@@ -124,7 +133,7 @@ module.exports = {
     },
     exec: function(command, options, callback) {
         var self = this;
-        if (typeof options === 'function') {
+        if (typeof options == 'function') {
             callback = options;
             options = {};
         }
