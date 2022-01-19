@@ -77,8 +77,20 @@ function sudoCommand(command, password, withResult, callback) {
                     spawnProcess.stdin.write(password + "\n");
                 }
             }
+            if (errorFound(line)) {
+                if(error === null) {
+                    error = ''
+                }
+                error += data.toString().trim() // In case script throws multiple errors
+                // error = new Error(data.toString().trim())
+            }
         });
     });
+}
+
+function errorFound(line) {
+    const errors = ['E: Invalid operation', 'could not be found', 'command not found', 'Invalid subcommand'];
+    return errors.filter(err => line.includes(err)).length ? true : false
 }
 
 function sudoCommandForWindows(command, withResult, callback) {
