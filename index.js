@@ -9,7 +9,7 @@ var messages = [
     'Password is invalid'
 ];
 
-function sudoCommand(command, password, withResult, callback) {
+function sudoCommand(command, password, withResult, callback, checking) {
     password = password || '';
     withResult = withResult === undefined ? true : withResult;
     // callback = callback || function() {
@@ -72,7 +72,9 @@ function sudoCommand(command, password, withResult, callback) {
             if (line === prompt) {
                 if (++prompts > 1) {
                     callback(true, {code: 1, msg: messages[1]}, result);
-                    spawnProcess.stdin.write("\n\n\n\n");
+                    if (!checking) {
+                        spawnProcess.stdin.write("\n\n\n\n");
+                    }
                 } else {
                     spawnProcess.stdin.write(password + "\n");
                 }
@@ -140,7 +142,7 @@ module.exports = {
                   callback(!err)
                 }
               }
-            })(0));
+            })(0), true);
         }
     },
     exec: function(command, options, callback) {
